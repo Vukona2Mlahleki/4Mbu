@@ -36,7 +36,7 @@
       object-fit: cover;
       margin-bottom: 20px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      transition: opacity 0.4s ease;
+      transition: opacity 0.4s ease, transform 0.4s ease;
       z-index: 2;
     }
 
@@ -111,7 +111,7 @@
   <div id="heartContainer"></div>
 
   <!-- Question Stage -->
-  <img src="question.jpg" alt="Cute image" class="question-img" id="questionImg">
+  <img src="question.jpeg" alt="Cute image" class="question-img" id="questionImg">
   <h1 id="question">Mbuyelo Enny Mongwe, will you be my Valentine? 💕</h1>
 
   <div class="buttons" id="buttonContainer">
@@ -121,7 +121,7 @@
 
   <!-- Message Stage -->
   <div id="message"></div>
-  <img src="yes.jpg" alt="Yay image" class="yes-img" id="yesImg" style="display: none;">
+  <img src="yes.jpeg" alt="Yay image" class="yes-img" id="yesImg" style="display: none;">
 
   <script>
     const yesBtn = document.getElementById("yesBtn");
@@ -134,6 +134,7 @@
     const heartContainer = document.getElementById("heartContainer");
 
     let yesSize = 1;
+    let saidNoOnce = false;
 
     // floating hearts generator
     function createHeart() {
@@ -145,21 +146,31 @@
       heart.style.animationDuration = 5 + Math.random() * 3 + "s";
       heartContainer.appendChild(heart);
 
-      setTimeout(() => {
-        heart.remove();
-      }, 8000);
+      setTimeout(() => heart.remove(), 8000);
     }
     setInterval(createHeart, 400);
 
-    // Button logic
+    // When "No" is clicked
     noBtn.addEventListener("click", () => {
       yesSize += 0.3;
       yesBtn.style.transform = `scale(${yesSize})`;
+
+      // Change picture to shock.jpeg the first time she says no
+      if (!saidNoOnce) {
+        questionImg.style.transform = "scale(0.9)";
+        setTimeout(() => {
+          questionImg.src = "shock.jpeg";
+          questionImg.style.transform = "scale(1)";
+        }, 200);
+        saidNoOnce = true;
+      }
+
       if (yesSize >= 2) {
         noBtn.style.display = "none";
       }
     });
 
+    // When "Yes" is clicked
     yesBtn.addEventListener("click", () => {
       if (question.textContent.includes("Mbuyelo")) {
         question.textContent = "Awhh, for real baby? 😍";
@@ -178,3 +189,4 @@
 
 </body>
 </html>
+
